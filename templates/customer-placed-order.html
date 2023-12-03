@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>You received an order</title>
+		<style>
+			body {
+				font-family: Arial, sans-serif;
+				margin: 0;
+				padding: 0;
+				background-color: #f4f4f4;
+			}
+
+			.container {
+				max-width: 600px;
+				margin: 20px auto;
+				padding: 20px;
+				background-color: #fff;
+				box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+			}
+
+			h2 {
+				color: #333;
+			}
+
+			p {
+				color: #666;
+			}
+
+			.order-details {
+				margin-top: 20px;
+				border-collapse: collapse;
+				width: 100%;
+			}
+
+			.order-details th,
+			.order-details td {
+				border: 1px solid #ddd;
+				padding: 10px;
+				text-align: left;
+			}
+
+			.order-details th {
+				background-color: #f2f2f2;
+			}
+
+			.contact-seller {
+				background-color: #f49907;
+				color: white;
+				text-decoration: none;
+				padding: 10px 20px;
+				display: inline-block;
+				border-radius: 5px;
+				margin-top: 20px;
+			}
+
+			.contact-seller:hover {
+				background-color: #f499079f;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<h2>Your order has been placed!</h2>
+			<p>Hello {{customer}},</p>
+
+			<p>You just placed an order from {{seller}} . Order details are as follows:</p>
+
+			<table class="order-details">
+				<tr>
+					<th>Order Number</th>
+					<td>{{number}}</td>
+				</tr>
+				<tr>
+					<th>Date and Time</th>
+					<td>{{date}}</td>
+				</tr>
+
+				<!-- Add more rows for each product, shipping address, order total, etc. -->
+			</table>
+
+			<p>
+				Your order is now being processed, and you will receive a notification once it has been shipped by the seller. If you have any questions or concerns, feel free to contact the seller
+				directly using the following link:
+			</p>
+			<a href="{{seller-link}}" class="contact-seller">Contact Seller</a>
+
+			<p>
+				We appreciate your business and hope you enjoy your shopping experience on Amazon. If you need any further assistance, please don't hesitate to reach out to our support team at
+				support@amazon.com.
+			</p>
+
+			<p>
+				Best regards,<br />
+				Amazon Ecommerce<br />
+			</p>
+		</div>
+	</body>
+</html>

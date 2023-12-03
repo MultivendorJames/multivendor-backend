@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Please verify your email</title>
+		<style>
+			body {
+				font-family: Arial, sans-serif;
+				margin: 0;
+				padding: 0;
+				background-color: #f4f4f4;
+			}
+
+			.container {
+				max-width: 600px;
+				margin: 20px auto;
+				padding: 20px;
+				background-color: #fff;
+				box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+			}
+
+			h2 {
+				color: #333;
+			}
+
+			p {
+				color: #666;
+			}
+
+			.verification-link {
+				background-color: #f49907;
+				color: white;
+				text-decoration: none;
+				padding: 10px 20px;
+				display: inline-block;
+				border-radius: 5px;
+				margin-top: 20px;
+			}
+
+			.verification-link:hover {
+				background-color: rgba(222, 184, 135, 0.851);
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<h2>Welcome to Amazon Ecommerce!</h2>
+			<p>Hello {{username}},</p>
+
+			<p>Thank you for signing up on Amazon Ecommerce. To complete your registration and ensure the security of your account, please click on the verification link below:</p>
+
+			<a href="{{link}}" class="verification-link">Verify Your Email</a>
+
+			<p>If the above button does not work, you can also copy and paste the following link into your browser:</p>
+			<p>{{link}}</p>
+
+			<p>This verification link will expire in 2 hours, so please verify your email address as soon as possible.</p>
+
+			<p>If you have any questions or need assistance, feel free to contact our support team at support@amazon.com</p>
+
+			<p>Thank you for choosing Amazon Ecommerce. We look forward to serving you!</p>
+
+			<p>
+				Best regards,<br />
+				Amazon Ecommerce<br />
+			</p>
+		</div>
+	</body>
+</html>
