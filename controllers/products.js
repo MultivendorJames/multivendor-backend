@@ -160,6 +160,11 @@ exports.updateProduct = async (req, res) => {
 			return res.status(400).json({ error: "Name or Slug already exists" });
 		}
 
+		// Check if the person editing is the initial owner of the product
+		if (existingProduct.user.equals(req.user._id)) {
+			return res.status(401).json({ error: "User not authorized to perform this action" });
+		}
+
 		// Update product
 		const product = await Product.findByIdAndUpdate(req.params.id, productData, {
 			new: true,

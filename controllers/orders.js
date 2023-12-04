@@ -188,7 +188,6 @@ exports.updateOrder = async (req, res) => {
 
 exports.updateOrderStatus = async (req, res) => {
 	const { status } = req.body;
-	console.log(status);
 	const { orderId } = req.params;
 	try {
 		// Check if order with order id already exist
@@ -199,7 +198,24 @@ exports.updateOrderStatus = async (req, res) => {
 			res.status(404).json({ error: "Order doesn't exist" });
 			return;
 		}
-		let order = await Order.updateOne({ _id: orderId }, { $set: { orderStatus: status } });
+
+		// Check the if this is the seller or buyer
+		const seller = existingOrder.sellerId == req.user._id;
+		const buyer = existingOrder.buyerId == req.user._id;
+
+		if (!seller || !buyer) {
+			return res.status(401).json({ error: "User not authorized to perform this action" });
+		}
+		const sellerValues = ["delivered", "shipped"];
+		if (seller && !sellerValues.includes(status.toLowerCase())) {
+			return res.status(401).json({ error: "Seller cannot change status to the specified value" });
+		}
+
+		if (buyer && existindOrder.status !== "delivered") {
+			return res.status(401).json({ error: "Order not marked as delivered" });
+		}
+
+		let order = await Order.updateOne({ _id: orderId }, { $set: { orderStatus: status.toLowerCase() } });
 
 		// Update order
 		res.status(200).json({ success: true });

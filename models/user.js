@@ -19,6 +19,7 @@ const userSchema = new mongoose.Schema({
 	date: { type: Date, default: Date.now },
 	verified: { type: Boolean, default: false },
 	code: { type: String },
+	balance: { type: Number, default: 0.0 },
 });
 
 // Hash password before saving to database

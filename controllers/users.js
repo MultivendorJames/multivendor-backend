@@ -8,19 +8,13 @@ const { sendVerifyEmail, sendResetPasswordEmail } = require("../libs/nodemailer"
 
 // All Users
 exports.listUsers = async (req, res) => {
-	// try {
-	//   let users = await User.find();
-	//   res.json(users);
-	// } catch (err) {
-	//   res.status(500).json({ error: err.message });
-	// }
-
 	const page = parseInt(req.query.page) || 1;
 	const limit = parseInt(req.query.limit) || 10;
 	const searchQuery = req.query.q || "";
 
 	try {
 		const filter = {
+			$neq: { role: "admin" },
 			$or: [{ name: { $regex: searchQuery, $options: "i" } }, { email: { $regex: searchQuery, $options: "i" } }],
 		};
 
@@ -28,7 +22,7 @@ exports.listUsers = async (req, res) => {
 
 		const totalPages = Math.ceil(totalRecords / limit);
 
-		const users = await User.find(filter)
+		const users = await User.find(filter, { password: 0, code: 0, __v: 0 })
 			.skip((page - 1) * limit)
 			.limit(limit);
 
@@ -248,16 +242,8 @@ exports.loginUser = async (req, res) => {
 
 // Checking JWT
 exports.checkJwt = async (req, res) => {
-	const { authorization } = req.headers;
-	const token = authorization && authorization.split(" ")[1];
-
-	if (!token) {
-		return res.status(401).json({ error: "Unauthorized" });
-	}
-
 	try {
-		const decoded = jwt.verify(token, process.env.SECRET);
-		const user = await User.findById(decoded.userId);
+		const user = await User.findById(req.user._id);
 		res.json(user);
 	} catch (error) {
 		return res.status(401).json({ error: "Unauthorized" });
