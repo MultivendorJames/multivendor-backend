@@ -1,5 +1,5 @@
 function admin(req, res, next) {
-	console.log(req);
+	// Write logic here soon
 	next();
 }
 

@@ -7,7 +7,7 @@ exports.listOrders = async (req, res) => {
 	const page = parseInt(req.query.page) || 1;
 	const limit = parseInt(req.query.limit) || 10;
 	const searchQuery = req.query.q || "";
-	const userId = req.query.userId || null;
+	const userId = req.query.userId || req.user._id;
 
 	try {
 		const filter = {};
