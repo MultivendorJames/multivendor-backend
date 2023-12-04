@@ -282,3 +282,22 @@ exports.changePassword = async (req, res) => {
 		res.status(500).json({ error: err.message });
 	}
 };
+
+exports.withdrawFunds = async (req, res) => {
+	let { amount, userInfo } = req.body;
+
+	if (!amount || !userInfo) {
+		res.status(403).json({ error: "Please provide all required credentials" });
+	}
+
+	if (typeof amount !== "number") {
+		res.status(401).json({ error: "Amount must be a number" });
+	}
+
+	// Check balance
+	const balance = Math.round(req.user.balance * 100) / 100;
+	if (amount > balance) {
+		res.status(401).json({ error: "User has insufficient funds to perform this transaction" });
+	}
+	//
+};

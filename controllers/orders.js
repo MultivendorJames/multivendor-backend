@@ -1,6 +1,7 @@
 const Order = require("../models/order");
 const User = require("../models/user");
 const Product = require("../models/product");
+const Transaction = require("../models/transactions");
 
 // All Orders
 exports.listOrders = async (req, res) => {
@@ -106,6 +107,10 @@ exports.createOrder = async (req, res) => {
 			return res.status(400).json({ error: "Order ID already exists" });
 		}
 
+		if (req.body.sellerId == req.body.customerId) {
+			return res.status(400).json({ error: "User can't buy his own product" });
+		}
+
 		if (req.body.paymentStatus == "paid") {
 			const products = req.body.products; // Assuming req.body.products is an array of product objects
 
@@ -131,6 +136,9 @@ exports.createOrder = async (req, res) => {
 			// Create new order
 			const order = new Order(req.body);
 			const result = await order.save();
+
+			// Save transaction
+			await Transaction.create({ type: "payment", paymentId: result._id, amount: Math.round(+order.total * 100) / 100, status: "completed", user: req.user._id });
 			res.json(result);
 		}
 	} catch (err) {

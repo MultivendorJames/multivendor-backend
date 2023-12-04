@@ -18,7 +18,7 @@ const user = async (req, res, next) => {
 			res.status(401).json({ error: "User is not authorized" });
 			return;
 		}
-		const user = await Users.findOne({ _id: valid.userId });
+		const user = await Users.findOne({ _id: valid.userId }, { password: 0, code: 0 });
 		if (!user) {
 			res.status(401).json({ error: "User is not authorized" });
 			return;

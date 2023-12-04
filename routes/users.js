@@ -15,5 +15,6 @@ router.get("/:id", user, admin, usersController.readUser);
 router.put("/:id", usersController.updateUser);
 router.put("/change-password/:id", usersController.changePassword);
 router.delete("/:id", user, usersController.deleteUser);
+router.post("/withdraw-funds", user, usersController.withdrawFunds);
 
 module.exports = router;
