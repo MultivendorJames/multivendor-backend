@@ -63,6 +63,7 @@ app.use("/categories", require("./routes/categories")); // Category route
 app.use("/products", require("./routes/products")); // Product route
 app.use("/orders", require("./routes/orders")); // Order route
 app.use("/messages", require("./routes/messages")); // Message route
+app.use("/contacts", require("./routes/contact"));
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<style>
+			body {
+				font-family: Arial, sans-serif;
+				background-color: #f4f4f4;
+				margin: 0;
+				padding: 20px;
+			}
+
+			.container {
+				max-width: 600px;
+				margin: 0 auto;
+				background-color: #fff;
+				padding: 20px;
+				border-radius: 5px;
+				box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+			}
+
+			h2 {
+				color: #333;
+			}
+
+			p {
+				color: #666;
+			}
+
+			.complaint-details {
+				margin-top: 20px;
+				border-collapse: collapse;
+				width: 100%;
+			}
+
+			.complaint-details th,
+			.complaint-details td {
+				border: 1px solid #ddd;
+				padding: 10px;
+				text-align: left;
+			}
+
+			.complaint-details th {
+				background-color: #f2f2f2;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<h2>New Message Received</h2>
+
+			<p>Hello Admin,</p>
+
+			<p>A user has submitted a complaint through the contact form. Here are the details:</p>
+
+			<table class="complaint-details">
+				<tr>
+					<th>Name</th>
+					<td>{{name}}</td>
+				</tr>
+				<tr>
+					<th>Email</th>
+					<td>{{email}}</td>
+				</tr>
+
+				<tr>
+					<th>Message</th>
+					<td>{{message}}</td>
+				</tr>
+			</table>
+
+			<p>Please take appropriate action and respond to the user as necessary. If you have any questions, feel free to reach out.</p>
+
+			<p>
+				Thank you,<br />
+				Amazon Limited Admin
+			</p>
+		</div>
+	</body>
+</html>
