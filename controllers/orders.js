@@ -210,8 +210,10 @@ exports.updateOrderStatus = async (req, res) => {
 		if (seller && !sellerValues.includes(status.toLowerCase())) {
 			return res.status(401).json({ error: "Seller cannot change status to the specified value" });
 		}
-
-		if (buyer && existindOrder.status !== "delivered") {
+		if (buyer && status.toLowerCase() !== "received") {
+			return res.status(401).json({ error: "Buyer can only update status to received" });
+		}
+		if (buyer && existingOrder.status !== "delivered") {
 			return res.status(401).json({ error: "Order not marked as delivered" });
 		}
 
