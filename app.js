@@ -19,7 +19,7 @@ const io = socketIO(server, {
 });
 
 var corsOptions = {
-	origin: process.env.FRONTEND_URL,
+	origin: [process.env.FRONTEND_URL, "http://localhost:5173"],
 };
 
 app.use(cors(corsOptions));
