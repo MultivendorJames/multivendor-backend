@@ -84,7 +84,15 @@ async function sendContactMessage({ name, email, message }) {
 	let subject = "ATTENTION - New Contact Message";
 	let txt = replaceKeys(template, keys);
 	await sendEmail(process.env.SUPPORT_EMAIL, subject, txt);
-	console.log("Email successfully sent to user with email " + email);
+}
+
+async function notifyUserOfContact({ name, email }) {
+	let template = fs.readFileSync(path.join(__dirname, "..", "templates", "contact-received.html"), "utf-8");
+	let keys = [{ tag: "{{name}}", value: name }];
+
+	let subject = "ATTENTION - Contact Message Received";
+	let txt = replaceKeys(template, keys);
+	await sendEmail(email, subject, txt);
 }
 
 async function newsletterStatusUpdatedMail(to, code, type) {
@@ -95,4 +103,4 @@ async function newsletterStatusUpdatedMail(to, code, type) {
 	console.log(`Email successfully sent to user with email ${to} and code is ${code} and user is ${type === "unsub" ? "unsubscribed" : "subscribed"}`);
 }
 
-module.exports = { sendResetPasswordEmail, sendContactMessage, sendOrderPlacedMail, sendVerifyEmail, sendResetPasswordEmail, newsletterStatusUpdatedMail };
+module.exports = { sendResetPasswordEmail, notifyUserOfContact, sendContactMessage, sendOrderPlacedMail, sendVerifyEmail, sendResetPasswordEmail, newsletterStatusUpdatedMail };

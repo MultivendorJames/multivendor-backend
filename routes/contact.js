@@ -1,5 +1,5 @@
 const express = require("express");
-const { sendContactMessage } = require("../libs/nodemailer");
+const { sendContactMessage, notifyUserOfContact } = require("../libs/nodemailer");
 const contactsRouter = express.Router();
 
 const postContactMessage = async (req, res) => {
@@ -9,6 +9,7 @@ const postContactMessage = async (req, res) => {
 	}
 	// Send contact message
 	await sendContactMessage({ name, message, email });
+	await notifyUserOfContact({ name, email });
 
 	res.status(200).json({ success: true, message: "Contact message sent successfully" });
 };
