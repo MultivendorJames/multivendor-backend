@@ -14,7 +14,7 @@ exports.listUsers = async (req, res) => {
 
 	try {
 		const filter = {
-			$neq: { role: "admin" },
+			role: { $ne: "admin" },
 			$or: [{ name: { $regex: searchQuery, $options: "i" } }, { email: { $regex: searchQuery, $options: "i" } }],
 		};
 
