@@ -191,6 +191,9 @@ exports.updateOrderStatus = async (req, res) => {
 			res.status(404).json({ error: "Product doesn't exist" });
 		}
 
+		if (product.status === "received" || product.status === status) {
+			res.status(404).json({ error: "Product status has already been updated" });
+		}
 		if (!["shipped", "received"].includes(status)) {
 			res.status(401).json({ error: "The provided status is invalid" });
 		}
@@ -201,15 +204,15 @@ exports.updateOrderStatus = async (req, res) => {
 			return res.status(401).json({ error: "User not authorized to perform this action" });
 		}
 
-		if (status === "received" && req.user._id.equals(order.customerId)) {
+		if (status === "received" && !req.user._id.equals(existingOrder.customerId)) {
 			return res.status(401).json({ error: "User not authorized to perform this action" });
 		}
 		// Update product status
 		await Order.updateOne({ orderId }, { $set: { products } });
 
+		// Update seller's balance
 		if (status === "received") {
-			// Update seller's balance
-			console.log(product);
+			await User.updateOne({ _id: product.userId }, { $inc: { balance: Math.round(product.price * 100) / 100 } });
 		}
 
 		res.status(200).json({ success: true });
