@@ -2,11 +2,9 @@ const mongoose = require("mongoose");
 
 const transactionSchema = new mongoose.Schema(
 	{
-		type: { type: String, required: true }, // Can be withdrawal or payment
-		paymentDetails: { type: String }, // Required for only withdrawals
-		paymentId: { type: String }, // Should be the orderId for payments
+		paymentMethod: { type: String, required: true },
 		amount: { type: Number, required: true },
-		status: { type: String, required: true }, // pending , completed , cancelled
+		status: { type: String, default: "pending" }, // pending , completed , cancelled
 		user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
 	},
 	{ timestamps: true }

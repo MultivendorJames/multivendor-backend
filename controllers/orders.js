@@ -111,8 +111,6 @@ exports.createOrder = async (req, res) => {
 		const order = new Order(req.body);
 		const result = await order.save();
 
-		// Save transaction
-		await Transaction.create({ type: "payment", paymentId: result._id, amount: Math.round(+order.total * 100) / 100, status: "completed", user: req.user._id });
 		res.json(result);
 	} catch (err) {
 		res.status(500).json({ error: err.message });
