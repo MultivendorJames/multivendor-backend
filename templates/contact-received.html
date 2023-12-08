@@ -6,9 +6,9 @@
 		<style>
 			body {
 				font-family: Arial, sans-serif;
-				background-color: #f4f4f4;
 				margin: 0;
 				padding: 20px;
+				background-color: #f4f4f4;
 			}
 
 			.container {
@@ -26,38 +26,57 @@
 
 			p {
 				color: #666;
+				line-height: 1.6;
 			}
 
-			.complaint-details {
+			.thank-you {
+				font-weight: bold;
+				/* color: #45a049; */
+			}
+
+			.contact-details {
 				margin-top: 20px;
-				border-collapse: collapse;
-				width: 100%;
 			}
 
-			.complaint-details th,
-			.complaint-details td {
-				border: 1px solid #ddd;
-				padding: 10px;
-				text-align: left;
+			.contact-details p {
+				margin: 10px 0;
 			}
 
-			.complaint-details th {
-				background-color: #f2f2f2;
+			.contact-details strong {
+				font-weight: bold;
+			}
+
+			.response-message {
+				margin-top: 20px;
+			}
+
+			.response-message p {
+				color: #333;
+			}
+
+			.additional-info {
+				margin-top: 20px;
+			}
+
+			.additional-info p {
+				color: #999;
 			}
 		</style>
 	</head>
 	<body>
 		<div class="container">
-			<h2>Contact Message Received</h2>
+			<h2>Thank You for Contacting Us!</h2>
+			<p class="thank-you">We appreciate your enquiry/complaint.</p>
 
-			<p>Hello {{name}},</p>
+			<div class="contact-details">
+				<p><strong>Name:</strong> {{name}}</p>
+				<p><strong>Email:</strong> {{email}}</p>
+				<p><strong>Subject:</strong>{{message}}</p>
+			</div>
 
-			<p>We have received your complaint and our support team will respond to you shortly.</p>
-
-			<p>
-				Thank you,<br />
-				Amazon Limited Admin
-			</p>
+			<div class="response-message">
+				<p>Your enquiry/complaint has been received, and our team is actively reviewing it. We understand the importance of your concerns and will respond to you as soon as possible.</p>
+			</div>
 		</div>
 	</body>
 </html>

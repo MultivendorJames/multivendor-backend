@@ -9,7 +9,7 @@ const postContactMessage = async (req, res) => {
 	}
 	// Send contact message
 	await sendContactMessage({ name, message, email });
-	await notifyUserOfContact({ name, email });
+	await notifyUserOfContact({ name, email, message });
 
 	res.status(200).json({ success: true, message: "Contact message sent successfully" });
 };

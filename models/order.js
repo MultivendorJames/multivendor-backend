@@ -4,12 +4,10 @@ const orderSchema = new mongoose.Schema({
 	orderId: { type: String, required: true, unique: true },
 	products: [
 		{
-			_id: { type: String, required: true },
-			name: { type: String, required: true },
-			image: { type: String, required: true },
-			price: { type: String, required: true },
-			quantity: { type: String, required: true },
-			unit: { type: String, required: true },
+			_id: { type: mongoose.Schema.Types.ObjectId, ref: "Product", required: true },
+			status: { type: String, default: "Processing" },
+			price: { type: Number, required: true },
+			quantity: { type: Number, required: true },
 		},
 	],
 	deliveryAddress: {
@@ -25,11 +23,7 @@ const orderSchema = new mongoose.Schema({
 	paymentMethod: { type: String, required: true },
 	paymentId: { type: String },
 	total: { type: String, required: true },
-	sellerId: { type: String, required: true },
-	customerId: { type: String, required: true },
-	paymentStatus: { type: String, required: true },
-	orderStatus: { type: String, default: "Processing" },
-	date: { type: Date, default: Date.now },
+	customerId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
 });
 
 const Order = mongoose.model("Order", orderSchema);

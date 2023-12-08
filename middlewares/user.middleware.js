@@ -9,11 +9,8 @@ const user = async (req, res, next) => {
 			return;
 		}
 		let token = req?.headers.authorization.split(" ")[1];
-		console.log(token);
 		// Compare auth
 		let valid = await jwt.verify(token, process.env.SECRET);
-		console.log(valid);
-
 		if (!valid.userId) {
 			res.status(401).json({ error: "User is not authorized" });
 			return;

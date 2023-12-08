@@ -86,11 +86,15 @@ async function sendContactMessage({ name, email, message }) {
 	await sendEmail(process.env.SUPPORT_EMAIL, subject, txt);
 }
 
-async function notifyUserOfContact({ name, email }) {
+async function notifyUserOfContact({ name, email, message }) {
 	let template = fs.readFileSync(path.join(__dirname, "..", "templates", "contact-received.html"), "utf-8");
-	let keys = [{ tag: "{{name}}", value: name }];
+	let keys = [
+		{ tag: "{{name}}", value: name },
+		{ tag: "{{email}}", value: email },
+		{ tag: "{{message}}", value: message },
+	];
 
-	let subject = "ATTENTION - Contact Message Received";
+	let subject = "Thank You for Contacting Us!";
 	let txt = replaceKeys(template, keys);
 	await sendEmail(email, subject, txt);
 }
