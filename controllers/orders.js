@@ -194,12 +194,9 @@ exports.updateOrderStatus = async (req, res) => {
 		if (!["shipped", "received"].includes(status)) {
 			res.status(401).json({ error: "The provided status is invalid" });
 		}
-		// Update product status
-		console.log(products);
-		let products = existingOrder.products.map((product) => (product._id.equals(productId) ? { ...product, status } : product));
-		console.log(products);
 
-		// Update the balance
+		let products = existingOrder.products.map((product) => (product._id.equals(productId) ? { ...product?._doc, status } : product));
+
 		if (status === "shipped" && req.user.role !== "admin") {
 			return res.status(401).json({ error: "User not authorized to perform this action" });
 		}
@@ -207,6 +204,8 @@ exports.updateOrderStatus = async (req, res) => {
 		if (status === "received" && req.user._id.equals(order.customerId)) {
 			return res.status(401).json({ error: "User not authorized to perform this action" });
 		}
+		// Update product status
+		await Order.updateOne({ orderId }, { $set: { products } });
 
 		if (status === "received") {
 			// Update seller's balance

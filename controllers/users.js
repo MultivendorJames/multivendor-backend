@@ -9,7 +9,7 @@ const { sendVerifyEmail, sendResetPasswordEmail } = require("../libs/nodemailer"
 // All Users
 exports.listUsers = async (req, res) => {
 	const page = parseInt(req.query.page) || 1;
-	const limit = parseInt(req.query.limit) || 10;
+	const limit = parseInt(req.query.limit) || 100;
 	const searchQuery = req.query.q || "";
 
 	try {
