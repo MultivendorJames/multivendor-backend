@@ -23,7 +23,7 @@ const productSchema = new mongoose.Schema({
 	metaTitle: { type: String, required: false },
 	metaDescription: { type: String, required: false },
 	views: { type: Number, default: 0 },
-	userId: { type: String, required: true },
+	userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
 	date: { type: Date, default: Date.now },
 });
 

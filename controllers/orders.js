@@ -16,7 +16,7 @@ exports.listOrders = async (req, res) => {
 			filter.order_id = { $regex: searchQuery, $options: "i" };
 		}
 		if (userId) {
-			filter.$or = [{ sellerId: userId }, { customerId: userId }];
+			filter.$or = [{ customerId: userId }];
 		}
 
 		const totalRecords = await Order.countDocuments(filter);
@@ -72,6 +72,8 @@ exports.adminFetchOrders = async (req, res) => {
 			.skip((page - 1) * limit)
 			.limit(limit);
 
+		console.log(orders);
+
 		// Fetch category data for each order
 		const orderDataPromises = orders.map(async (order) => {
 			const customer = order.customerId ? await User.findById(order.customerId) : null;
@@ -123,16 +125,23 @@ exports.createOrder = async (req, res) => {
 exports.readOrder = async (req, res) => {
 	try {
 		const orderId = req.params.id;
-		const order = await Order.findOne({ orderId: orderId }).populate("customerId");
+		let order = await Order.findOne({ orderId: orderId }).populate("customerId").populate("products");
 		if (!order) {
 			res.status(404).json({ error: "The provided order was not found." });
 		}
 
 		// Get products data
 		const productIds = order.products.map((product) => product._id);
-		let products = await Product.find({ _id: { $in: productIds } });
-
-		order.products = products;
+		let products = await Product.find({ _id: { $in: productIds } }, { name: 1, price: 1, image: 1 }).populate("userId", "email name");
+		products = products.map((product) => {
+			const productFromOrder = order.products.find((p) => {
+				return p._id.equals(product._id);
+			});
+			console.log("prod", productFromOrder);
+			let { userId, ...rest } = product._doc;
+			return { ...rest, seller: userId, price: productFromOrder.price, status: productFromOrder.status, quantity: productFromOrder.quantity };
+		});
+		order = { ...order._doc, products };
 
 		res.status(200).json(order);
 	} catch (err) {
@@ -161,39 +170,29 @@ exports.updateOrder = async (req, res) => {
 	}
 };
 
-// Update the status of a product
+// Update the status of a product in the order
 exports.updateOrderStatus = async (req, res) => {
-	const { status } = req.body;
+	const { status, productId } = req.body;
 	const { orderId } = req.params;
+	if ((!orderId, productId)) {
+		res.status(400).json({ error: "Please provide all required fields" });
+	}
 	try {
 		// Check if order with order id already exist
 		const existingOrder = await Order.findOne({
-			_id: orderId,
+			orderId: orderId,
 		});
 		if (!existingOrder) {
 			res.status(404).json({ error: "Order doesn't exist" });
 			return;
 		}
 
-		// Check the if this is the seller or buyer
-		const seller = existingOrder.sellerId == req.user._id;
-		const buyer = existingOrder.buyerId == req.user._id;
-
-		if (!seller || !buyer) {
-			return res.status(401).json({ error: "User not authorized to perform this action" });
-		}
 		const sellerValues = ["delivered", "shipped"];
-		if (seller && !sellerValues.includes(status.toLowerCase())) {
-			return res.status(401).json({ error: "Seller cannot change status to the specified value" });
-		}
-		if (buyer && status.toLowerCase() !== "received") {
-			return res.status(401).json({ error: "Buyer can only update status to received" });
-		}
-		if (buyer && existingOrder.status !== "delivered") {
-			return res.status(401).json({ error: "Order not marked as delivered" });
-		}
 
-		let order = await Order.updateOne({ _id: orderId }, { $set: { orderStatus: status.toLowerCase() } });
+		if (!req.session.user._id.equals(order.customerId) && req.session.user.role !== "admin") {
+			res.status(401).json({ error: "User not authorized to perform this action" });
+		}
+		await Order.updateOne({ orderId: status });
 
 		// Update order
 		res.status(200).json({ success: true });

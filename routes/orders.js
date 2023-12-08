@@ -5,7 +5,7 @@ const admin = require("../middlewares/admin.middleware");
 const user = require("../middlewares/user.middleware");
 
 router.get("/", user, ordersController.listOrders);
-router.get("/all", admin, ordersController.adminFetchOrders);
+router.get("/all", user, admin, ordersController.adminFetchOrders);
 router.post("/", user, ordersController.createOrder);
 router.get("/:id", user, ordersController.readOrder);
 router.put("/:id", user, ordersController.updateOrder);
