@@ -76,12 +76,10 @@ exports.adminFetchOrders = async (req, res) => {
 
 		// Fetch category data for each order
 		const orderDataPromises = orders.map(async (order) => {
-			const customer = order.customerId ? await User.findById(order.customerId) : null;
-			const seller = order.sellerId ? await User.findById(order.sellerId) : null;
+			const customer = order.customerId ? await User.findById(order.customerId, { email: 1, firstname: 1 }) : null;
 			return {
 				...order.toObject(),
 				customer: customer ? customer.toObject() : null,
-				seller: seller ? seller.toObject() : null,
 			};
 		});
 
@@ -174,7 +172,7 @@ exports.updateOrder = async (req, res) => {
 exports.updateOrderStatus = async (req, res) => {
 	const { status, productId } = req.body;
 	const { orderId } = req.params;
-	if ((!orderId, productId)) {
+	if (!orderId || !productId) {
 		res.status(400).json({ error: "Please provide all required fields" });
 	}
 	try {
@@ -187,14 +185,34 @@ exports.updateOrderStatus = async (req, res) => {
 			return;
 		}
 
-		const sellerValues = ["delivered", "shipped"];
-
-		if (!req.session.user._id.equals(order.customerId) && req.session.user.role !== "admin") {
-			res.status(401).json({ error: "User not authorized to perform this action" });
+		// Check if product exists
+		const product = await Product.findOne({ _id: productId });
+		if (!product) {
+			res.status(404).json({ error: "Product doesn't exist" });
 		}
-		await Order.updateOne({ orderId: status });
 
-		// Update order
+		if (!["shipped", "received"].includes(status)) {
+			res.status(401).json({ error: "The provided status is invalid" });
+		}
+		// Update product status
+		console.log(products);
+		let products = existingOrder.products.map((product) => (product._id.equals(productId) ? { ...product, status } : product));
+		console.log(products);
+
+		// Update the balance
+		if (status === "shipped" && req.user.role !== "admin") {
+			return res.status(401).json({ error: "User not authorized to perform this action" });
+		}
+
+		if (status === "received" && req.user._id.equals(order.customerId)) {
+			return res.status(401).json({ error: "User not authorized to perform this action" });
+		}
+
+		if (status === "received") {
+			// Update seller's balance
+			console.log(product);
+		}
+
 		res.status(200).json({ success: true });
 	} catch (err) {
 		res.status(500).json({ error: err.message });
