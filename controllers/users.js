@@ -205,7 +205,7 @@ exports.loginUser = async (req, res) => {
 	const { email, password } = req.body;
 
 	try {
-		const user = await User.findOne({ email });
+		const user = await User.findOne({ email }, { __v: 0, createdAt: 0, updatedAt: 0 });
 
 		if (!user) return res.status(401).json({ error: "Invalid email or password" }); // validating email
 		const isMatch = await user.comparePassword(password); // validating password
@@ -233,8 +233,10 @@ exports.loginUser = async (req, res) => {
 		const token = jwt.sign({ userId: user._id }, process.env.SECRET, {
 			expiresIn: "30d",
 		});
+		// Remove password from user
+		const { password: userPassword, ...rest } = user?._doc;
 
-		res.status(200).json({ user, token });
+		res.status(200).json({ user: rest, token });
 	} catch (err) {
 		res.status(500).json({ error: err.message });
 	}

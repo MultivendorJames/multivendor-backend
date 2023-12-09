@@ -6,7 +6,7 @@ exports.adminGetTransactions = async (req, res) => {
 		let { status } = req.query;
 		const filter = status ? { status } : {};
 
-		const transactions = await Transactions.find(filter);
+		const transactions = await Transactions.find(filter).populate("user", "email name");
 		res.status(200).json(transactions);
 	} catch (e) {
 		res.status(400).json({ error: e.message });
