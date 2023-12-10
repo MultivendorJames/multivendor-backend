@@ -14,7 +14,7 @@ app.use("/uploads", express.static("uploads"));
 const server = http.createServer(app);
 const io = socketIO(server, {
 	cors: {
-		origin: process.env.FRONTEND_URL,
+		origin: [process.env.FRONTEND_URL, "http://localhost:5173"],
 	},
 });
 
