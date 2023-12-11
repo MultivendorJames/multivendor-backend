@@ -107,6 +107,11 @@ exports.createOrder = async (req, res) => {
 			return res.status(400).json({ error: "Order ID already exists" });
 		}
 
+		// Create emails
+		// Send email to buyer
+
+		// Send email to seller
+
 		// Create new order
 		const order = new Order(req.body);
 		const result = await order.save();
