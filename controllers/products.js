@@ -37,7 +37,7 @@ exports.listProducts = async (req, res) => {
 		const productDataPromises = products.map(async (product) => {
 			const category = product.category && mongoose.Types.ObjectId.isValid(product.category) ? await Category.findById(product.category) : null;
 
-			const user = product.userId && mongoose.Types.ObjectId.isValid(product.userId) ? await User.findById(product.userId) : null;
+			const user = product.userId && mongoose.Types.ObjectId.isValid(product.userId) ? await User.findById(product.userId, { name: 1, email: 1 }) : null;
 			return {
 				...product.toObject(),
 				category: category ? category.toObject() : null,
