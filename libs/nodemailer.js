@@ -76,7 +76,7 @@ async function sendOrderPlacedMail({ name, number, email, date, address, link })
 	console.log("Email successfully sent to user with email " + email);
 }
 async function buyerProductOrderReceivedMail({ name, seller, quantity, email, date, address, link, total }) {
-	let template = fs.readFileSync(path.join(__dirname, "..", "templates", "customer-placed-order.html"), "utf-8");
+	let template = fs.readFileSync(path.join(__dirname, "..", "templates", "new-order.html"), "utf-8");
 	let keys = [
 		{ tag: "{{name}}", value: name },
 		{ tag: "{{seller}}", value: seller },
