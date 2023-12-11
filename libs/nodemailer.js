@@ -58,17 +58,36 @@ async function sendResetPasswordEmail({ username, link, email }) {
 	await sendEmail(email, subject, message);
 	console.log("Email successfully sent to user with email " + email);
 }
-async function sendOrderPlacedMail({ name, reference, email, date }) {
-	let template = fs.readFileSync(path.join(__dirname, "..", "templates", "order-placed.html"), "utf-8");
+async function sendOrderPlacedMail({ name, number, email, date, address, link }) {
+	let template = fs.readFileSync(path.join(__dirname, "..", "templates", "customer-placed-order.html"), "utf-8");
 	let keys = [
 		{ tag: "{{name}}", value: name },
-		{ tag: "{{reference}}", value: reference },
+		{ tag: "{{number}}", value: number },
 		{ tag: "{{date}}", value: date },
 		{ tag: "{{email}}", value: email },
-		{ tag: "{{support}}", value: process.env.SUPPORT },
+		{ tag: "{{address}}", value: address },
+		{ tag: "{{link}}", value: link },
 	];
 
-	let subject = "Your GCMS Notes Request Has Being Processed";
+	console.log(keys);
+	let subject = "Your Order Has Been Placed";
+	let message = replaceKeys(template, keys);
+	await sendEmail(email, subject, message);
+	console.log("Email successfully sent to user with email " + email);
+}
+async function buyerProductOrderReceivedMail({ name, seller, quantity, email, date, address, link, total }) {
+	let template = fs.readFileSync(path.join(__dirname, "..", "templates", "customer-placed-order.html"), "utf-8");
+	let keys = [
+		{ tag: "{{name}}", value: name },
+		{ tag: "{{seller}}", value: seller },
+		{ tag: "{{quantity}}", value: quantity },
+		{ tag: "{{date}}", value: date },
+		{ tag: "{{total}}", value: total },
+		{ tag: "{{address}}", value: address },
+		{ tag: "{{link}}", value: link },
+	];
+
+	let subject = "Your Order Has Been Placed";
 	let message = replaceKeys(template, keys);
 	await sendEmail(email, subject, message);
 	console.log("Email successfully sent to user with email " + email);
@@ -164,6 +183,7 @@ module.exports = {
 	sendSellerPayoutMessage,
 	notifyAdminOfPayoutMessage,
 	sendOrderPlacedMail,
+	buyerProductOrderReceivedMail,
 	sendVerifyEmail,
 	sendResetPasswordEmail,
 	newsletterStatusUpdatedMail,

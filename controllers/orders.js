@@ -2,6 +2,8 @@ const Order = require("../models/order");
 const User = require("../models/user");
 const Product = require("../models/product");
 const Transaction = require("../models/transactions");
+const { sendOrderPlacedMail, buyerProductOrderReceivedMail } = require("../libs/nodemailer");
+const createTimeAndDate = require("../utils/createTimeAndDate");
 
 // All Orders
 exports.listOrders = async (req, res) => {
@@ -67,26 +69,20 @@ exports.adminFetchOrders = async (req, res) => {
 
 		const totalPages = Math.ceil(totalRecords / limit);
 
-		const orders = await Order.find(filter)
+		let orders = await Order.find(filter)
 			.sort({ date: -1 })
 			.skip((page - 1) * limit)
-			.limit(limit);
+			.limit(limit)
+			.populate("customerId", "email firstname");
 
-		console.log(orders);
-
-		// Fetch category data for each order
-		const orderDataPromises = orders.map(async (order) => {
-			const customer = order.customerId ? await User.findById(order.customerId, { email: 1, firstname: 1 }) : null;
-			return {
-				...order.toObject(),
-				customer: customer ? customer.toObject() : null,
-			};
+		// Replace customerId with customer
+		orders = orders.map((order) => {
+			const { customerId, ...rest } = order._doc;
+			return { ...rest, customer: customerId, customerId: customerId._id };
 		});
 
-		const data = await Promise.all(orderDataPromises);
-
 		res.json({
-			data,
+			data: orders,
 			page,
 			totalPages,
 			totalRecords,
@@ -98,6 +94,7 @@ exports.adminFetchOrders = async (req, res) => {
 
 // Create order
 exports.createOrder = async (req, res) => {
+	const { name, email } = req.user;
 	try {
 		// Check if order with order id already exists
 		const existingOrder = await Order.findOne({
@@ -107,16 +104,54 @@ exports.createOrder = async (req, res) => {
 			return res.status(400).json({ error: "Order ID already exists" });
 		}
 
-		// Create emails
-		// Send email to buyer
+		let {
+			orderId,
+			products,
+			deliveryAddress: { address, city, state, country },
+		} = req.body;
+		address = `${address}, ${city}, ${state} ${country}`;
+		console.log(address, orderId);
 
-		// Send email to seller
-
-		// Create new order
+		// // Create new order
 		const order = new Order(req.body);
 		const result = await order.save();
+		// // Create emails
+		// // Send email to buyer
+		let date = createTimeAndDate(new Date());
 
-		res.json(result);
+		await sendOrderPlacedMail({ link: `${process.env.FRONTEND_URL}/orders/${orderId}`, name, email, address, number: `#${orderId}`, date });
+
+		// Send email to seller(s)
+		let promises = [];
+		products.forEach((product) => {
+			promises.push(
+				new Promise(async (resolve, reject) => {
+					try {
+						// Get Product details and buyer
+						let p = await Product.findOne({ _id: product._id }, { name: 1, price: 1 }).populate("userId", "email name");
+						let { price, name, userId } = p;
+						let { quantity } = product;
+						await buyerProductOrderReceivedMail({
+							email: userId.email,
+							seller: userId.name,
+							name,
+							quantity,
+							total: Math.round(price * quantity * 100) / 100,
+							address,
+							date,
+							link: `${process.env.FRONTEND_URL}/orders/${orderId}`,
+						});
+						resolve({ success: true });
+					} catch (e) {
+						reject(e);
+					}
+				})
+			);
+		});
+
+		await Promise.all(promises);
+
+		res.status(200).json(result);
 	} catch (err) {
 		res.status(500).json({ error: err.message });
 	}

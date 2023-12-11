@@ -63,7 +63,7 @@
 	<body>
 		<div class="container">
 			<h2>Your order has been placed!</h2>
-			<p>Hello {{customer}},</p>
+			<p>Hello {{name}},</p>
 
 			<table class="order-details">
 				<tr>
@@ -73,6 +73,10 @@
 				<tr>
 					<th>Date and Time</th>
 					<td>{{date}}</td>
+				</tr>
+				<tr>
+					<th>Shipping Address</th>
+					<td>{{address}}</td>
 				</tr>
 
 				<!-- Add more rows for each product, shipping address, order total, etc. -->
