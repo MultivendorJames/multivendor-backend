@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Payout Success Notification</title>
+		<style>
+			body {
+				font-family: Arial, sans-serif;
+				margin: 0;
+				padding: 0;
+				background-color: #f4f4f4;
+			}
+
+			.container {
+				max-width: 600px;
+				margin: 20px auto;
+				background-color: #ffffff;
+				padding: 20px;
+				border-radius: 5px;
+				box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+			}
+
+			h1 {
+				color: #28a745; /* Green color for success */
+			}
+
+			p {
+				color: #666;
+			}
+
+			.button {
+				display: inline-block;
+				padding: 10px 20px;
+				margin-top: 20px;
+				text-decoration: none;
+				color: #ffffff;
+				background-color: #28a745; /* Green color for success */
+				border-radius: 5px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<h1>Payout Successful</h1>
+			<p>Hello {{name}},</p>
+			<p>We are pleased to inform you that your payout request has been successfully processed. Below are the details:</p>
+
+			<ul>
+				<li><strong>Total Amount:</strong> {{amount}}</li>
+				<li><strong>Date of Payout:</strong> {{date}}</li>
+			</ul>
+
+			<p>The funds have been transferred to your account. Thank you for your continued partnership with us.</p>
+
+			<p>If you have any questions or concerns, feel free to contact our support team.</p>
+
+			<p>Best regards,</p>
+			<p>Your E-commerce Team</p>
+
+			<a href="{{link}}" class="button">View Transaction Details</a>
+		</div>
+	</body>
+</html>

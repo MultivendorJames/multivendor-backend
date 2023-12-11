@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Payout Rejection Notification</title>
+		<style>
+			body {
+				font-family: Arial, sans-serif;
+				margin: 0;
+				padding: 0;
+				background-color: #f4f4f4;
+			}
+
+			.container {
+				max-width: 600px;
+				margin: 20px auto;
+				background-color: #ffffff;
+				padding: 20px;
+				border-radius: 5px;
+				box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+			}
+
+			h1 {
+				color: #dc3545; /* Red color for rejection */
+			}
+
+			p,
+			li {
+				color: #666;
+			}
+
+			.button {
+				display: inline-block;
+				padding: 10px 20px;
+				margin-top: 20px;
+				text-decoration: none;
+				color: #ffffff !important;
+				background-color: #dc3545; /* Red color for rejection */
+				border-radius: 5px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<h1>Payout Rejected</h1>
+			<p>Hello [Seller Name],</p>
+			<p>We regret to inform you that your payout request has been rejected by the admin. Below are the details:</p>
+
+			<ul>
+				<li><strong>Total Amount:</strong> {{name}}</li>
+				<li><strong>Date of Rejection:</strong> {{date}}</li>
+				<li><strong>Reason for Rejection:</strong> {{reason}}</li>
+			</ul>
+
+			<p>If you have any questions or concerns regarding this decision, please contact our support team.</p>
+
+			<p>Thank you for your understanding.</p>
+
+			<p>Best regards,</p>
+			<p>Your E-commerce Team</p>
+
+			<a href="mailto:support@amazon.com" class="button">Contact Support</a>
+		</div>
+	</body>
+</html>

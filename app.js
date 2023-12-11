@@ -72,7 +72,7 @@ const PORT = process.env.PORT || 8080;
 
 (async function () {
 	console.log("Connecting to database...");
-	connectDB(); // connecting db
+	await connectDB(); // connecting db
 	server.listen(PORT, () => {
 		console.log(`Server is running on port ${PORT}.`);
 	});

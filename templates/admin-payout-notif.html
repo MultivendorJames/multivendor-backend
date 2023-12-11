@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Seller Payout Request</title>
+		<style>
+			body {
+				font-family: Arial, sans-serif;
+				margin: 0;
+				padding: 0;
+				background-color: #f4f4f4;
+			}
+
+			.container {
+				max-width: 600px;
+				margin: 20px auto;
+				background-color: #ffffff;
+				padding: 20px;
+				border-radius: 5px;
+				box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+			}
+
+			h1 {
+				color: #333;
+			}
+
+			p,
+			li {
+				color: #666;
+			}
+
+			.button {
+				display: inline-block;
+				padding: 10px 20px;
+				margin-top: 20px;
+				text-decoration: none;
+				color: #ffffff;
+				background-color: #007bff;
+				border-radius: 5px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<h1>Seller Payout Request</h1>
+			<p>Hello Admin,</p>
+			<p>A seller has requested a payout for the sold items. Below are the details:</p>
+
+			<ul>
+				<li><strong>Seller Name:</strong> {{name}}</li>
+				<li><strong>Total Amount:</strong> {{amount}}</li>
+				<li><strong>Date of Request:</strong> {{date}}</li>
+			</ul>
+
+			<p>Please review the request and process the payout accordingly.</p>
+
+			<p>Thank you,</p>
+			<p>Your E-commerce Team</p>
+
+			<a href="{{link}}" class="button">Review Payout Request</a>
+		</div>
+	</body>
+</html>

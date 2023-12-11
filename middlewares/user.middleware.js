@@ -21,8 +21,8 @@ const user = async (req, res, next) => {
 			return;
 		}
 
-		const { email, _id, role, balance } = user;
-		req.user = { email, _id, role, balance };
+		const { email, _id, role, balance, name } = user;
+		req.user = { email, _id, role, balance, name };
 	} catch (err) {
 		res.status(403).json({ error: err.message });
 		return;
