@@ -56,7 +56,7 @@ exports.listOrders = async (req, res) => {
 
 exports.adminFetchOrders = async (req, res) => {
 	const page = parseInt(req.query.page) || 1;
-	const limit = parseInt(req.query.limit) || 50;
+	const limit = parseInt(req.query.limit) || 25;
 	const searchQuery = req.query.q || "";
 
 	try {
