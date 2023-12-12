@@ -26,7 +26,7 @@ exports.listOrders = async (req, res) => {
 		const totalPages = Math.ceil(totalRecords / limit);
 
 		const orders = await Order.find(filter)
-			.sort({ date: -1 })
+			.sort({ _id: -1 })
 			.skip((page - 1) * limit)
 			.limit(limit);
 
