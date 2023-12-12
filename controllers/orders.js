@@ -56,7 +56,7 @@ exports.listOrders = async (req, res) => {
 
 exports.adminFetchOrders = async (req, res) => {
 	const page = parseInt(req.query.page) || 1;
-	const limit = parseInt(req.query.limit) || 10;
+	const limit = parseInt(req.query.limit) || 50;
 	const searchQuery = req.query.q || "";
 
 	try {
@@ -110,7 +110,6 @@ exports.createOrder = async (req, res) => {
 			deliveryAddress: { address, city, state, country },
 		} = req.body;
 		address = `${address}, ${city}, ${state} ${country}`;
-		console.log(address, orderId);
 
 		// // Create new order
 		const order = new Order(req.body);
