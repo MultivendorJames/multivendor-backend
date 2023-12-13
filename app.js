@@ -65,7 +65,8 @@ app.use("/orders", require("./routes/orders")); // Order route
 app.use("/messages", require("./routes/messages")); // Message route
 app.use("/contacts", require("./routes/contact")); // Contact route
 app.use("/payouts", require("./routes/transactions")); // Transaction route
-app.use("/admin", require("./routes/admin"));
+app.use("/admin", require("./routes/admin")); // Admin route
+app.use("/bookmarks", require("./routes/bookmarks")); // Bookmark route
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;

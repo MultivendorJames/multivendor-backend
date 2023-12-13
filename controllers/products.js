@@ -1,5 +1,6 @@
 const Product = require("../models/product");
 const Category = require("../models/category");
+const Bookmark = require("../models/bookmarks");
 const { default: mongoose } = require("mongoose");
 const User = require("../models/user");
 const { getSecuredUrl } = require("../libs/cloudinary");
@@ -118,10 +119,18 @@ exports.readProduct = async (req, res) => {
 
 		const category = product.category && mongoose.Types.ObjectId.isValid(product.category) ? await Category.findById(product.category) : null;
 
-		const productData = {
+		let productData = {
 			...product.toObject(),
 			category: category ? category.toObject() : null,
+			bookmarked: false,
 		};
+
+		if (req?.user?._id) {
+			// Fetch bookmarks and check if product is marked or not
+			let bookmark = await Bookmark.findOne({ user: req.user._id });
+			let bookmarked = bookmark?.products?.includes(req.params.id);
+			productData = { ...product?._doc, bookmarked };
+		}
 
 		res.json(productData);
 	} catch (err) {
