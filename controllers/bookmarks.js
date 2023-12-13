@@ -1,4 +1,5 @@
 const Bookmark = require("../models/bookmarks");
+const Product = require("../models/product");
 
 exports.toggleBookmark = async (req, res) => {
 	const { productId } = req.body;
@@ -22,6 +23,13 @@ exports.toggleBookmark = async (req, res) => {
 };
 
 exports.getBookmarks = async (req, res) => {
-	let bookmarks = await Bookmark.find();
-	res.status(200).json(bookmarks);
+	let bookmarks = await Bookmark.findOne({ user: req.user._id });
+	if (!bookmarks) {
+		return res.statis(200).json([]);
+	}
+	let promises = [];
+	bookmarks?.products?.forEach((product) => promises.push(Product.findOne({ _id: product })));
+
+	let products = await Promise.all(promises);
+	res.status(200).json(products);
 };
