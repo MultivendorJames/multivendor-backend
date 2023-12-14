@@ -30,7 +30,7 @@ exports.createPayout = async (req, res) => {
 		const { _id, balance, name, email } = req.user;
 		const { paymentMethod } = req.body;
 		if (balance === 0) {
-			res.status(400).json({ error: "User's balance must be greater than zero to request a payout." });
+			return res.status(400).json({ error: "User's balance must be greater than zero to request a payout." });
 		}
 		let date = new Date();
 		// Format the date
