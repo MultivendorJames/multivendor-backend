@@ -11,15 +11,16 @@ exports.toggleBookmark = async (req, res) => {
 	// Create one with the provided product id
 
 	if (bookmark) {
-		let products = bookmark.products.includes(productId) ? bookmark.products.filter((p) => !p.equals(productId)) : [...bookmark.products, productId];
+		let exists = bookmark.products.includes(productId);
+		let products = exists ? bookmark.products.filter((p) => !p.equals(productId)) : [...bookmark.products, productId];
 		// Check and make toggle
 		await Bookmark.updateOne({ _id: bookmark._id }, { $set: { products } });
+		return res.status(200).json({ message: `Product successfully to ${exists ? "removed from" : "added to"}  saved products` });
 	} else {
 		// Create bookmark
 		await Bookmark.create({ user: req.user._id, products: [productId] });
+		res.status(200).json({ message: "Product successfully added to saved products" });
 	}
-
-	res.status(200).json({ message: "Bookmark successfully toggled" });
 };
 
 exports.getBookmarks = async (req, res) => {
